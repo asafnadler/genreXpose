@@ -53,18 +53,54 @@ def convert_any_to_wav(filename):
     pass
 
 
-def convert_dataset_to_wav(file_name):
+def convert_dataset_to_wav(logging=False):
     """
         Converts all files of the GTZAN dataset
         to the WAV (uncompressed) format.
     """
+    if logging:
+        import logging
+        l = logging.getLogger("pydub.converter")
+        l.setLevel(logging.DEBUG)
+        l.addHandler(logging.StreamHandler())
+
     start = timeit.default_timer()
     rootdir = GENRE_DIR
     for subdir, dirs, files in os.walk(rootdir):
         for file in files:
             path = subdir+'/'+file
             if path.endswith("au"):
-                song = AudioSegment.from_file(path,"mp3")
+                song = AudioSegment.from_file(path, "au")
+                song = song[:30000]
+                song.export(path[:-2]+"wav",format='wav')
+
+    for subdir, dirs, files in os.walk(rootdir):
+        for file in files:
+            path = subdir+'/'+file
+            if not path.endswith("wav"):
+                os.remove(path)
+
+    stop = timeit.default_timer()
+    print "Conversion time = ", (stop - start)
+
+def convert_test_to_wav(logging=False):
+    """
+        Converts all files of the GTZAN dataset
+        to the WAV (uncompressed) format.
+    """
+    if logging:
+        import logging
+        l = logging.getLogger("pydub.converter")
+        l.setLevel(logging.DEBUG)
+        l.addHandler(logging.StreamHandler())
+
+    start = timeit.default_timer()
+    rootdir = TEST_DIR
+    for subdir, dirs, files in os.walk(rootdir):
+        for file in files:
+            path = subdir+'/'+file
+            if path.endswith("mp3"):
+                song = AudioSegment.from_file(path, "mp3")
                 song = song[:30000]
                 song.export(path[:-3]+"wav",format='wav')
 
@@ -75,7 +111,7 @@ def convert_dataset_to_wav(file_name):
                 os.remove(path)
 
     stop = timeit.default_timer()
-    print "Conversion time = ", (stop - start) 
+    print "Conversion time = ", (stop - start)
 
 
 def plot_confusion_matrix(cm, genre_list, name, title):
@@ -118,3 +154,6 @@ def plot_roc_curves(auc_score, name, tpr, fpr, label=None):
     pylab.legend(loc="lower right")
     filename = name.replace(" ", "_")
     pylab.savefig(os.path.join(CHART_DIR, "roc_" + filename + ".png"), bbox_inches="tight")
+
+if __name__ == "__main__":
+    convert_dataset_to_wav()

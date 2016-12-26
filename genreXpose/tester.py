@@ -10,7 +10,7 @@ from sklearn.linear_model.logistic import LogisticRegression
 from sklearn.metrics import confusion_matrix
 from sklearn.externals import joblib
 
-from utils import plot_roc, plot_confusion_matrix, GENRE_DIR, GENRE_LIST, TEST_DIR
+from utils import plot_confusion_matrix, GENRE_DIR, GENRE_LIST, TEST_DIR, convert_test_to_wav
 
 from ceps import read_ceps, create_ceps_test, read_ceps_test
 
@@ -26,7 +26,7 @@ clf = None
 
 def test_model_on_single_file(file_path):
     clf = joblib.load('saved_model/model_ceps.pkl')
-    X, y = read_ceps_test(create_ceps_test(test_file)+".npy")
+    X, y = read_ceps_test(create_ceps_test(file_path)+".npy")
     probs = clf.predict_proba(X)
     print "\t".join(str(x) for x in traverse)
     print "\t".join(str("%.3f" % x) for x in probs[0])
@@ -42,13 +42,19 @@ def test_model_on_single_file(file_path):
     return predicted_genre
 
 if __name__ == "__main__":
-
+    convert_test_to_wav()
     global traverse
     for subdir, dirs, files in os.walk(GENRE_DIR):
         traverse = list(set(dirs).intersection(set(GENRE_LIST)))
         break
 
-    test_file = "/home/jaz/Desktop/genre-project/genres_test_set/Metallica - Enter the Sandman -  mp3.pk.wav"
+    for subdir, dirs, files in os.walk(TEST_DIR):
+        for file in files:
+            if str.lower(file[-3:]) == 'wav':
+                print file
+                predicted_genre = test_model_on_single_file(TEST_DIR + file)
+        break
+
     # should predict genre as "ROCK"
-    predicted_genre = test_model_on_single_file(test_file)
+    #predicted_genre = test_model_on_single_file(test_file)
     

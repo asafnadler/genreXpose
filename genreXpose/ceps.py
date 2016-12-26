@@ -80,7 +80,7 @@ if __name__ == "__main__":
         traverse = list(set(dirs).intersection( set(GENRE_LIST) ))
         break
     print "Working with these genres --> ", traverse
-    print "Starting ceps generation"     
+    print "Starting ceps generation"
     for subdir, dirs, files in os.walk(GENRE_DIR):
         for file in files:
             path = subdir+'/'+file
@@ -88,6 +88,6 @@ if __name__ == "__main__":
                 tmp = subdir[subdir.rfind('/',0)+1:]
                 if tmp in traverse:
                     create_ceps(path)
-                    
+
     stop = timeit.default_timer()
     print "Total ceps generation and feature writing time (s) = ", (stop - start) 

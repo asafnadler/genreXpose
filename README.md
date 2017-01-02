@@ -63,6 +63,10 @@ In particular, this software requires you to have the following:
 * scikit-learn
 * scikits.statsmodels
 * scikits.talkbox
+* hmmlearn 
+* simplejson
+* eyed3
+* pyAudioAnalysis (git clone https://github.com/tyiannak/pyAudioAnalysis.git)
 
 ###2. Setup & Configuration
 
@@ -74,6 +78,7 @@ The variables are:
 * ```GENRE_DIR``` - This is directory where the music dataset is located (GTZAN dataset) 
 * ```TEST_DIR``` - This is the directory where the test music is located
 * ```GENRE_LIST``` - This is a list of the available genre types that you can use. Modify this list if you want to work with a subset of the available genres.
+* ```FEATURE_EXTRACTION``` - This is a path to the audioAnalysis.py script.
 
 Set these three variables according to your system before proceeding to the next steps.
 
@@ -94,7 +99,7 @@ Since the files in the dataset are in the ```au``` format, which is lossy becaus
 
 NOTE: be sure to fully complete step 2 before moving further.
 
-Now, the script ```ceps.py``` has to be run. This script analyzes and converts each file in the GTZAN dataset in a representation that can be used by the classifier and can be easily cached onto the disk. This little step prevents the classifier to convert the dataset each time the system is run. 
+Now, the script ```feature_extraction.py``` has to be run. This script analyzes and converts each file in the GTZAN dataset in a representation that can be used by the classifier and can be easily cached onto the disk. This little step prevents the classifier to convert the dataset each time the system is run. 
 
 The GTZAN dataset is used for training the classifier, which generates an in-memory regression model. This process is done by the ```LogisticRegression``` module of the scikit-learn library. The ```classifier.py``` script has been provided for this purpose. Once the model has been generated, we can use it to predict genres of other audio files. For effecient further use of the generated model, it is permanently serialized to the disk, and is deserialized when it needs to be used again. This simple process improves performance greatly. For serialization, the ```joblib``` module in the ```sklearn.externals``` package is used.
 
@@ -139,21 +144,4 @@ The confusion matrix with all the genres selected is shown below.
 
 <img style="float: right" src="https://raw.githubusercontent.com/jazdev/genreXpose/master/genreXpose/graphs/confusion_matrix_ceps.png" alt="Confusion matrix of the classifier" />
 
-###7. Internal Details
-
-#####Spectrograms: Proof of Concept
-
-A spectrogram is a visual representation of the frequency content in a song. It shows the intensity of the frequencies on the y axis in the specified time intervals on the x axis; that is, the darker the color, the stronger the frequency is in the particular time window of the song.
-
-Sample spectrograms of a few songs from the GTZAN dataset.
-
-<img style="float: right" src="https://raw.githubusercontent.com/jazdev/genreXpose/master/genreXpose/graphs/Spectrogram_Genres_clean.png" alt="Spectrograms" />
-
-It can be clearly seen from the above image that songs belonging to the same genre have similar spectrograms. Keeping this in mind, we can easily design a classifier that can learn to differentiate between the different genres with sufficient accuracy.
-
-#####Improved Performance by using MFCC
-
-MFCC = Mel Frequency Cepstral Coefficients
-
-The Mel Frequency Cepstrum (MFC) encodes the power spectrum of a sound. It is calculated as the Fourier transform of the logarithm of the signal's spectrum. The Talkbox SciKit (scikits.talkbox) contains an implementation of of MFC that we can directly use. The data that we feed into the classifier is stored as ```ceps```, which contain 13 coeffecients to uniquely represent an audio file. 
 

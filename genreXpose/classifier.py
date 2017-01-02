@@ -10,7 +10,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.externals import joblib
 from utils import GENRE_LIST, GENRE_DIR, TEST_DIR
 from utils import plot_confusion_matrix, plot_roc_curves
-from ceps import read_ceps, read_ceps_test
+#from ceps import read_ceps, read_ceps_test
+from feature_extraction import read_features
 
 genre_list = GENRE_LIST
 
@@ -22,7 +23,6 @@ def train_model(X, Y, name, plot=False):
     """
     labels = np.unique(Y)
 
-    #cv = ShuffleSplit(n=len(X), n_iterations=1, test_fraction=0.3, indices=True, random_state=0)
     cv = ShuffleSplit(n=len(X), n_iter=1, test_size=0.3,random_state=0)
 
     train_errors = []
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     print
     print " Starting classification \n"
     print " Classification running ... \n" 
-    X, y = read_ceps(genre_list)
+    X, y = read_features(genre_list)
     train_avg, test_avg, cms = train_model(X, y, "ceps", plot=True)
     cm_avg = np.mean(cms, axis=0)
     cm_norm = cm_avg / np.sum(cm_avg, axis=0)

@@ -14,6 +14,7 @@ execfile("config.cfg", config)
 GENRE_DIR = config["GENRE_DIR"]
 TEST_DIR = config["TEST_DIR"]
 GENRE_LIST = config["GENRE_LIST"]
+FEATURE_EXTRACTION_SCRIPT = config["FEATURE_EXTRACTION_SCRIPT"]
 
 if GENRE_DIR is None or GENRE_DIR is "":
     print "Please set GENRE_DIR in config.cfg"
@@ -25,6 +26,10 @@ elif TEST_DIR is None or TEST_DIR is "":
 
 elif GENRE_LIST is None or len(GENRE_LIST)==0:
     print "Please set GENRE_LIST in config.cfg" 
+    sys.exit(1)
+
+elif FEATURE_EXTRACTION_SCRIPT is None or len(FEATURE_EXTRACTION_SCRIPT)==0:
+    print "Please set FEATURE_EXTRACTION_SCRIPT in config.cfg"
     sys.exit(1)
 
 else:

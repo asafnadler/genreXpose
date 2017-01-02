@@ -12,7 +12,7 @@ from sklearn.externals import joblib
 
 from utils import plot_confusion_matrix, GENRE_DIR, GENRE_LIST, TEST_DIR, convert_test_to_wav
 
-from ceps import read_ceps, create_ceps_test, read_ceps_test
+from feature_extraction import read_features, read_features_test, create_feature_test
 
 from pydub import AudioSegment
 
@@ -26,7 +26,7 @@ clf = None
 
 def test_model_on_single_file(file_path):
     clf = joblib.load('saved_model/model_ceps.pkl')
-    X, y = read_ceps_test(create_ceps_test(file_path)+".npy")
+    X, y = read_features_test(create_feature_test(file_path))
     probs = clf.predict_proba(X)
     print "\t".join(str(x) for x in traverse)
     print "\t".join(str("%.3f" % x) for x in probs[0])

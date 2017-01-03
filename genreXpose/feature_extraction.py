@@ -1,7 +1,13 @@
 import os
 import numpy as np
 import glob
-from utils import GENRE_DIR, GENRE_LIST, TEST_DIR, FEATURE_EXTRACTION_SCRIPT
+from utils import GENRE_DIR, GENRE_LIST, AUDIOANALYSIS_DIR
+
+# Load pyAudioAnalysis
+import sys
+sys.path.append(AUDIOANALYSIS_DIR)
+from pyAudioAnalysis import audioBasicIO
+from pyAudioAnalysis import audioFeatureExtraction as aF
 
 def read_features(genre_list, base_dir=GENRE_DIR):
     """
@@ -36,9 +42,7 @@ def create_feature_test(fn):
         Creates the MFCC features from the test files,
         saves them to disk, and returns the saved file name.
     """
-    cmd = "python {} featureExtractionFile -i {} -mw 1.0 -ms 1.0 -sw 0.050 -ss 0.050 -o {}".format(FEATURE_EXTRACTION_SCRIPT, fn, fn)
-    print cmd
-    os.system(cmd)
+    aF.mtFeatureExtractionToFile(fn, 1.0, 1.0, 0.050, 0.050, fn, True, True, True)
     return fn + ".npy"
 
 if __name__ == "__main__":
@@ -50,9 +54,8 @@ if __name__ == "__main__":
     print "Working with these genres --> ", traverse
 
     for genre in traverse:
-        # TODO : Use a Python call rather than a system call
-        cmd = "python {} featureExtractionDir -i {}/{}/ -mw 1.0 -ms 1.0 -sw 0.050 -ss 0.050".format(FEATURE_EXTRACTION_SCRIPT, GENRE_DIR, genre)
-        os.system(cmd)
+        dir = "{}/{}".format(GENRE_DIR, genre)
+        aF.mtFeatureExtractionToFileDir(dir, 1.0, 1.0, 0.050, 0.050, True, True, True);
 
     stop = timeit.default_timer()
     print "Total feature extraction and feature writing time (s) = ", (stop - start)

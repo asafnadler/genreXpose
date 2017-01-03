@@ -1,4 +1,3 @@
-import os
 import timeit
 import numpy as np
 from collections import defaultdict
@@ -8,9 +7,8 @@ from sklearn.cross_validation import ShuffleSplit
 from sklearn.linear_model.logistic import LogisticRegression
 from sklearn.metrics import confusion_matrix
 from sklearn.externals import joblib
-from utils import GENRE_LIST, GENRE_DIR, TEST_DIR
+from utils import GENRE_LIST
 from utils import plot_confusion_matrix, plot_roc_curves
-#from ceps import read_ceps, read_ceps_test
 from feature_extraction import read_features
 
 genre_list = GENRE_LIST

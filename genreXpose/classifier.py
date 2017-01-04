@@ -19,6 +19,7 @@ def train_model(X, Y, name, plot=False):
         
         Trains and saves model to disk.
     """
+    global clf
     labels = np.unique(Y)
 
     cv = ShuffleSplit(n=len(X), n_iter=1, test_size=0.3,random_state=0)
@@ -28,7 +29,6 @@ def train_model(X, Y, name, plot=False):
 
     scores = []
     pr_scores = defaultdict(list)
-    precisions, recalls, thresholds = defaultdict(list), defaultdict(list), defaultdict(list)
 
     roc_scores = defaultdict(list)
     tprs = defaultdict(list)
@@ -75,7 +75,6 @@ def train_model(X, Y, name, plot=False):
             plot_roc_curves(roc_scores[label][median], desc, tprs[label][median],fprs[label][median], label='%s vs rest' % genre_list[label])
 
     all_pr_scores = np.asarray(pr_scores.values()).flatten()
-    summary = (np.mean(scores), np.std(scores), np.mean(all_pr_scores), np.std(all_pr_scores))
     #print("%.3f\t%.3f\t%.3f\t%.3f\t" % summary)
 
     #save the trained model to disk

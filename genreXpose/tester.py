@@ -1,20 +1,9 @@
 import os
-import timeit
-import numpy as np
-from collections import defaultdict
 
-from sklearn.metrics import precision_recall_curve, roc_curve
-from sklearn.metrics import auc
-from sklearn.cross_validation import ShuffleSplit
-from sklearn.linear_model.logistic import LogisticRegression
-from sklearn.metrics import confusion_matrix
 from sklearn.externals import joblib
 
-from utils import plot_confusion_matrix, GENRE_DIR, GENRE_LIST, TEST_DIR, convert_test_to_wav
-
-from feature_extraction import read_features, read_features_test, create_feature_test
-
-from pydub import AudioSegment
+from feature_extraction import read_features_test, create_feature_test
+from utils import GENRE_DIR, GENRE_LIST, TEST_DIR, convert_test_to_wav
 
 genre_list = GENRE_LIST
 
@@ -25,6 +14,7 @@ clf = None
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 def test_model_on_single_file(file_path):
+    global max_prob_index
     clf = joblib.load('saved_model/model_ceps.pkl')
     X, y = read_features_test(create_feature_test(file_path))
     probs = clf.predict_proba(X)
@@ -49,10 +39,10 @@ if __name__ == "__main__":
         break
 
     for subdir, dirs, files in os.walk(TEST_DIR):
-        for file in files:
-            if str.lower(file[-3:]) == 'wav':
-                print file
-                predicted_genre = test_model_on_single_file(TEST_DIR + file)
+        for f in files:
+            if str.lower(f[-3:]) == 'wav':
+                print f
+                predicted_genre = test_model_on_single_file(TEST_DIR + f)
         break
 
     # should predict genre as "ROCK"

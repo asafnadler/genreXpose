@@ -39,7 +39,7 @@ your-working-dir/
 
 ```
 
-The ```genreXpose/``` directory contains the main code-base. This directory also contains the ```config.cfg``` file which is used for the configuraton of the software.
+The ```genreXpose/``` directory contains the main code-base. This directory also contains the ```config.cfg``` file which is used for the configuration of the software.
 
 * ```graphs/``` will contain all the generated graphs. The graphs are an excellent indicator of the performance of the algorithm.
 * ```test/``` houses all the tests.

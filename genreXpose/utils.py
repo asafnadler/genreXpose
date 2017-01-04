@@ -1,9 +1,9 @@
 import os
 import sys
 import timeit
-import numpy as np
-from pydub import AudioSegment
+
 from matplotlib import pylab
+from pydub import AudioSegment
 
 ###################################################
 #    Don't modify below this line
@@ -51,7 +51,7 @@ for d in [DATA_DIR, CHART_DIR, MODEL_DIR]:
         os.mkdir(d)
 
 
-def convert_any_to_wav(filename):
+def convert_any_to_wav():
     """
         Converts the input file to the WAV format.
     """
@@ -72,16 +72,16 @@ def convert_dataset_to_wav(logging=False):
     start = timeit.default_timer()
     rootdir = GENRE_DIR
     for subdir, dirs, files in os.walk(rootdir):
-        for file in files:
-            path = subdir+'/'+file
+        for f in files:
+            path = subdir+'/'+f
             if path.endswith("au"):
                 song = AudioSegment.from_file(path, "au")
                 song = song[:30000]
                 song.export(path[:-2]+"wav",format='wav')
 
     for subdir, dirs, files in os.walk(rootdir):
-        for file in files:
-            path = subdir+'/'+file
+        for f in files:
+            path = subdir+'/'+f
             if not path.endswith("wav"):
                 os.remove(path)
 

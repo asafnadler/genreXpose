@@ -1,12 +1,12 @@
-import os
-import numpy as np
 import glob
+import os
+import sys
+
+import numpy as np
+
 from utils import GENRE_DIR, GENRE_LIST, AUDIOANALYSIS_DIR
 
-# Load pyAudioAnalysis
-import sys
 sys.path.append(AUDIOANALYSIS_DIR)
-from pyAudioAnalysis import audioBasicIO
 from pyAudioAnalysis import audioFeatureExtraction as aF
 
 def read_features(genre_list, base_dir=GENRE_DIR):
@@ -54,8 +54,8 @@ if __name__ == "__main__":
     print "Working with these genres --> ", traverse
 
     for genre in traverse:
-        dir = "{}/{}".format(GENRE_DIR, genre)
-        aF.mtFeatureExtractionToFileDir(dir, 1.0, 1.0, 0.050, 0.050, True, True, True);
+        genre_dir = "{}/{}".format(GENRE_DIR, genre)
+        aF.mtFeatureExtractionToFileDir(genre_dir, 1.0, 1.0, 0.050, 0.050, True, True, True)
 
     stop = timeit.default_timer()
     print "Total feature extraction and feature writing time (s) = ", (stop - start)

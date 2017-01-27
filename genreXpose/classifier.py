@@ -42,7 +42,7 @@ def train_model(X, Y, name, plot=False):
         X_train, y_train = X[train], Y[train]
         X_test, y_test = X[test], Y[test]
 
-        clf = LogisticRegression()
+        clf = LogisticRegression(solver='newton-cg', n_jobs=-1)
         clf.fit(X_train, y_train)
         clfs.append(clf)
 
